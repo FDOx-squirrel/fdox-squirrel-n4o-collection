@@ -37,47 +37,31 @@ quietly drift from the shapes every other collection is checked against.
 
 ## Current status (2026-09-04)
 
-The workflow is **not yet enabled on push**. `n4o-rse/n4o-kg-profile` is
-patched directly (see `n4o-kg-profile-patch.zip` and its `PATCH-README.md`)
-rather than reported as an issue, since that org belongs to the same person
-maintaining this one. Once that patch is committed and tagged `v1`:
+**Live and working end-to-end.** Build #4 succeeded (`collection` and `pages`
+both green, 36s) after two upstream fixes to `n4o-rse/n4o-kg-profile` and one
+correction here:
 
-1. `git ls-remote --tags https://github.com/n4o-rse/n4o-kg-profile.git`
-   should show `v1`.
-2. Add `push: {branches: [main]}` back to `.github/workflows/build.yml`
-   here — the only change needed, the `uses:` line already matches.
-3. Create this repository on GitHub (see **Setting up the repository**
-   below) and push this tree to it.
-4. *Settings → Pages → Source: GitHub Actions*.
-5. Push (or run *Actions → Build → Run workflow* by hand first).
+- the checkout-org bug (`n4o-kg-profile-patch.zip`),
+- a self-checkout that resolved to the wrong ref inside a composite action
+  (`n4o-kg-profile-patch-2.zip`, `github.action_path` instead of a second
+  `actions/checkout` keyed on `github.action_ref`),
+- **GitHub Pages must be set to *Settings → Pages → Source: GitHub Actions*
+  *before* the first run that tries to deploy it**, not after — the first
+  attempt (Build #3) failed its `pages` job for exactly that reason. The
+  order given in an earlier revision of this README had it backwards.
 
-`metadata.yaml`'s `sameAs` now carries the FDOx Registry's real Wikidata item
+Live:
+
+- Collection page: <https://fdox-squirrel.github.io/fdox-squirrel-n4o-collection/>
+- Query page (SPARQL in the browser, via Pyodide): <https://fdox-squirrel.github.io/fdox-squirrel-n4o-collection/sparql.html>
+- `push` is now enabled (`.github/workflows/build.yml`) — every push to
+  `main` rebuilds and redeploys.
+
+`metadata.yaml`'s `sameAs` carries the FDOx Registry's real Wikidata item
 (Q141277996). `id` and `homepage` still point at the source repository as a
 placeholder until the registry has its own DOI (`fdo-squirrel-registry`
-PRIMER.md, S8/S9) and VZG assigns a collection number.
-
-## Setting up the repository
-
-Not created yet. When you do:
-
-| Setting | Value |
-|---|---|
-| Owner | `FDOx-squirrel` (same org as `fdo-squirrel-registry`, `fdo-squirrel`) |
-| Name | `fdox-squirrel-n4o-collection` |
-| Description | "NFDI4Objects Knowledge Graph collection for the FDOx Registry" |
-| Visibility | Public — GitHub Pages and the `raw.githubusercontent.com` fetch both need it |
-| Default branch | `main` |
-| Topics | `nfdi4objects`, `fair-digital-object`, `linked-open-data`, `dcat`, `cidoc-crm`, `knowledge-graph` |
-| Initialise with | nothing (README/LICENSE/gitignore) — this tree already has them; an auto-created README would just collide on the first push |
-| Pages | *Settings → Pages → Source: GitHub Actions*, only after the first successful workflow run — the option has nothing to point at before then |
-
-Push this tree as the initial commit (`git init`, `git remote add origin
-git@github.com:FDOx-squirrel/fdox-squirrel-n4o-collection.git`, `git add -A`,
-one commit, `git push -u origin main`) — the usual `primer-repo` skeleton
-(`main.py`, `PRIMER.md`) is deliberately **not** part of it; `n4o-kg-profile`
-copies `profile/` and `build/` in on every run and expects exactly one
-hand-maintained file (`fdo-squirrel-registry`'s own `PRIMER.md`, A4,
-"Ort und Form des Collection-Repos").
+PRIMER.md, S8/S9) and VZG assigns a collection number — updating either is a
+one-line edit to `metadata.yaml`, nothing structural.
 
 ## Running it by hand
 
