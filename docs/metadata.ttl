@@ -1,0 +1,345 @@
+@prefix crm: <http://www.cidoc-crm.org/cidoc-crm/> .
+@prefix dcat: <http://www.w3.org/ns/dcat#> .
+@prefix dcmitype: <http://purl.org/dc/dcmitype/> .
+@prefix dct: <http://purl.org/dc/terms/> .
+@prefix fabio: <http://purl.org/spar/fabio/> .
+@prefix foaf: <http://xmlns.com/foaf/0.1/> .
+@prefix geo: <http://www.opengis.net/ont/geosparql#> .
+@prefix n4o: <https://nfdi4objects.net/ontology#> .
+@prefix n4op: <https://w3id.org/nfdi4objects/profile/v0.1/> .
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
+@prefix prov: <http://www.w3.org/ns/prov#> .
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix schema: <https://schema.org/> .
+@prefix sh: <http://www.w3.org/ns/shacl#> .
+@prefix skos: <http://www.w3.org/2004/02/skos/core#> .
+@prefix spdx: <http://spdx.org/rdf/terms#> .
+@prefix void: <http://rdfs.org/ns/void#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+
+<file:///home/runner/work/fdox-squirrel-n4o-collection/fdox-squirrel-n4o-collection/classes-with-counts> a sh:SPARQLSelectExecutable ;
+    dct:title "Verwendete Klassen mit Anzahl"@de,
+        "Classes used, with counts"@en ;
+    rdfs:comment "Was in dieser Sammlung vorkommt - die Gegenprobe zur VoID-Statistik."@de,
+        "What occurs in this collection - the counterpart to the VoID statistics."@en ;
+    sh:select """PREFIX crm: <http://www.cidoc-crm.org/cidoc-crm/>
+PREFIX crmdig: <http://www.ics.forth.gr/isl/CRMdig/>
+PREFIX dcat: <http://www.w3.org/ns/dcat#>
+PREFIX dct: <http://purl.org/dc/terms/>
+PREFIX fdo: <https://w3id.org/fdo-squirrel/>
+
+SELECT ?class (COUNT(?s) AS ?count) WHERE {
+  ?s a ?class
+} GROUP BY ?class ORDER BY DESC(?count)
+""" .
+
+<file:///home/runner/work/fdox-squirrel-n4o-collection/fdox-squirrel-n4o-collection/fdos-with-type-and-licence> a sh:SPARQLSelectExecutable ;
+    dct:title "Jedes FDO mit Typ, Lizenz und Dateizahl"@de,
+        "Every FDO with its type, licence and file count"@en ;
+    rdfs:comment "Die Liste, fuer die die Registry existiert, vom Katalogknoten aus gezaehlt - dieselbe Abfrage, mit der fdo-squirrel-registry sich selbst gegen die Facettenseite gegenprueft (queries.yaml, catalogue-overview)."@de,
+        "The list the registry exists for, counted from the catalogue node outwards - the same query fdo-squirrel-registry runs as its own crosscheck against the facet page (queries.yaml, catalogue-overview)."@en ;
+    sh:select """PREFIX crm: <http://www.cidoc-crm.org/cidoc-crm/>
+PREFIX crmdig: <http://www.ics.forth.gr/isl/CRMdig/>
+PREFIX dcat: <http://www.w3.org/ns/dcat#>
+PREFIX dct: <http://purl.org/dc/terms/>
+PREFIX fdo: <https://w3id.org/fdo-squirrel/>
+
+SELECT ?fdo ?title ?type ?licence (COUNT(?distribution) AS ?files) WHERE {
+  ?catalogue a dcat:Catalog ; dcat:dataset ?fdo .
+  ?fdo dct:title ?title ; a ?type .
+  FILTER(STRSTARTS(STR(?type), STR(fdo:)))
+  OPTIONAL { ?fdo dct:license ?licence }
+  OPTIONAL { ?fdo dcat:distribution ?distribution }
+} GROUP BY ?fdo ?title ?type ?licence ORDER BY ?title
+""" .
+
+dct:PeriodOfTime rdfs:subClassOf crm:E52_Time-Span .
+
+<http://www.opengis.net/ont/sf#Point> rdfs:subClassOf <http://www.ics.forth.gr/isl/CRMgeo/SP5_Geometric_Place_Expression> .
+
+skos:Concept rdfs:subClassOf crm:E28_Conceptual_Object .
+
+dcat:Catalog rdfs:subClassOf crm:E31_Document .
+
+dcat:CatalogRecord rdfs:subClassOf crm:E31_Document .
+
+dcat:Distribution rdfs:subClassOf <http://www.ics.forth.gr/isl/CRMdig/D9_Data_Object> .
+
+<https://github.com/FDOx-squirrel/fdo-squirrel-registry> a fabio:Database,
+        dcat:Dataset ;
+    dct:accessRights <http://publications.europa.eu/resource/authority/access-right/PUBLIC> ;
+    dct:conformsTo <https://w3id.org/nfdi4objects/profile/v0.1> ;
+    dct:creator [ a foaf:Person ;
+            foaf:familyName "Thiery" ;
+            foaf:givenName "Florian" ;
+            foaf:name "Thiery, Florian" ;
+            n4o:orcidId <https://orcid.org/0000-0002-3246-3531> ;
+            schema:affiliation [ a foaf:Organization ;
+                    foaf:name "Leibniz-Zentrum fuer Archaeologie (LEIZA)" ] ] ;
+    dct:description "Eine Registry fuer FAIR Digital Objects, gebaut mit der FDOx-Squirrel- Referenzimplementierung: erntet FDO-Metadaten von Zenodo, buendelt sie zu einem an CIDOC CRM verankerten DCAT-Katalog, validiert ihn mit SHACL und veroeffentlicht eine Filter- und SPARQL-Oberflaeche als statische Seite. Diese Collection veroeffentlicht denselben CIDOC-CRM-verankerten Bundle (dist/fdo-registry-n4o.ttl) fuer den NFDI4Objects Knowledge Graph erneut."@de,
+        "A registry for FAIR Digital Objects packaged with the FDOx Squirrel reference implementation: harvests FDO metadata published on Zenodo, bundles it into a DCAT catalogue anchored in CIDOC CRM, validates it with SHACL, and publishes a filter and SPARQL interface as a static site. This collection re-publishes the same CIDOC-CRM-anchored bundle (dist/fdo-registry-n4o.ttl) for the NFDI4Objects Knowledge Graph."@en ;
+    dct:issued "2026-09-04"^^xsd:date ;
+    dct:language <http://id.loc.gov/vocabulary/iso639-1/en> ;
+    dct:license <http://creativecommons.org/licenses/by/4.0/> ;
+    dct:modified "2026-09-04"^^xsd:date ;
+    dct:publisher [ a foaf:Organization ;
+            foaf:name "Leibniz-Zentrum fuer Archaeologie (LEIZA)" ] ;
+    dct:title "FDOx Registry"@de,
+        "FDOx Registry"@en ;
+    dct:type dcmitype:Dataset ;
+    void:classPartition [ void:class schema:Person ;
+            void:entities 5 ],
+        [ void:class dcat:Distribution ;
+            void:entities 492 ],
+        [ void:class crm:E74_Group ;
+            void:entities 1 ],
+        [ void:class <https://w3id.org/fdo-squirrel/3DDataFDO> ;
+            void:entities 5 ],
+        [ void:class crm:E21_Person ;
+            void:entities 5 ],
+        [ void:class owl:Ontology ;
+            void:entities 2 ],
+        [ void:class <http://www.ics.forth.gr/isl/CRMdig/D9_Data_Object> ;
+            void:entities 492 ],
+        [ void:class crm:E52_Time-Span ;
+            void:entities 7 ],
+        [ void:class <http://www.ics.forth.gr/isl/CRMdig/D1_Digital_Object> ;
+            void:entities 7 ],
+        [ void:class schema:Organization ;
+            void:entities 1 ],
+        [ void:class dcat:Catalog ;
+            void:entities 1 ],
+        [ void:class dct:PeriodOfTime ;
+            void:entities 7 ],
+        [ void:class skos:Concept ;
+            void:entities 6 ],
+        [ void:class owl:DatatypeProperty ;
+            void:entities 2 ],
+        [ void:class skos:ConceptScheme ;
+            void:entities 1 ],
+        [ void:class dcat:CatalogRecord ;
+            void:entities 7 ],
+        [ void:class crm:E73_Information_Object ;
+            void:entities 7 ],
+        [ void:class crm:E31_Document ;
+            void:entities 8 ],
+        [ void:class <https://w3id.org/fdo-squirrel/SoftwareFDO> ;
+            void:entities 2 ],
+        [ void:class <http://www.ics.forth.gr/isl/CRMgeo/SP5_Geometric_Place_Expression> ;
+            void:entities 7 ],
+        [ void:class owl:ObjectProperty ;
+            void:entities 3 ],
+        [ void:class crm:E53_Place ;
+            void:entities 6 ],
+        [ void:class <http://www.opengis.net/ont/sf#Point> ;
+            void:entities 7 ],
+        [ void:class dcat:Dataset ;
+            void:entities 7 ] ;
+    void:propertyPartition [ void:property skos:definition ;
+            void:triples 6 ],
+        [ void:property dcat:byteSize ;
+            void:triples 492 ],
+        [ void:property skos:hasTopConcept ;
+            void:triples 6 ],
+        [ void:property <https://codemeta.github.io/terms/codeRepository> ;
+            void:triples 2 ],
+        [ void:property schema:license ;
+            void:triples 10 ],
+        [ void:property <https://codemeta.github.io/terms/license> ;
+            void:triples 10 ],
+        [ void:property <https://citation-file-format.github.io/terms/keywords> ;
+            void:triples 11 ],
+        [ void:property dct:subject ;
+            void:triples 28 ],
+        [ void:property crm:P4_has_time-span ;
+            void:triples 14 ],
+        [ void:property crm:P3_has_note ;
+            void:triples 28 ],
+        [ void:property <http://www.wikidata.org/prop/direct/P921> ;
+            void:triples 11 ],
+        [ void:property dct:contributor ;
+            void:triples 1 ],
+        [ void:property dct:title ;
+            void:triples 16 ],
+        [ void:property rdfs:domain ;
+            void:triples 5 ],
+        [ void:property dcat:endDate ;
+            void:triples 7 ],
+        [ void:property dcat:mediaType ;
+            void:triples 492 ],
+        [ void:property <https://codemeta.github.io/terms/programmingLanguage> ;
+            void:triples 3 ],
+        [ void:property <https://w3id.org/fdo-squirrel/registry/conceptDoi> ;
+            void:triples 7 ],
+        [ void:property dcat:distribution ;
+            void:triples 492 ],
+        [ void:property <https://w3id.org/fdo-squirrel/context> ;
+            void:triples 7 ],
+        [ void:property <https://citation-file-format.github.io/terms/license> ;
+            void:triples 10 ],
+        [ void:property dct:modified ;
+            void:triples 7 ],
+        [ void:property dcat:keyword ;
+            void:triples 21 ],
+        [ void:property <https://codemeta.github.io/terms/keywords> ;
+            void:triples 11 ],
+        [ void:property skos:notation ;
+            void:triples 6 ],
+        [ void:property dcat:record ;
+            void:triples 7 ],
+        [ void:property dct:license ;
+            void:triples 9 ],
+        [ void:property rdfs:isDefinedBy ;
+            void:triples 5 ],
+        [ void:property schema:description ;
+            void:triples 5 ],
+        [ void:property schema:latitude ;
+            void:triples 7 ],
+        [ void:property <https://w3id.org/fdo-squirrel/registry/versionDoi> ;
+            void:triples 7 ],
+        [ void:property foaf:primaryTopic ;
+            void:triples 7 ],
+        [ void:property schema:name ;
+            void:triples 6 ],
+        [ void:property <https://w3id.org/fdo-squirrel/registry/readRepair> ;
+            void:triples 8 ],
+        [ void:property dct:provenance ;
+            void:triples 5 ],
+        [ void:property rdfs:range ;
+            void:triples 4 ],
+        [ void:property skos:prefLabel ;
+            void:triples 6 ],
+        [ void:property skos:inScheme ;
+            void:triples 6 ],
+        [ void:property schema:keywords ;
+            void:triples 11 ],
+        [ void:property rdfs:label ;
+            void:triples 18 ],
+        [ void:property <https://w3id.org/fdo-squirrel/registry/sha256> ;
+            void:triples 7 ],
+        [ void:property dct:temporal ;
+            void:triples 7 ],
+        [ void:property dct:source ;
+            void:triples 11 ],
+        [ void:property dct:type ;
+            void:triples 7 ],
+        [ void:property schema:funding ;
+            void:triples 7 ],
+        [ void:property dct:created ;
+            void:triples 7 ],
+        [ void:property dcat:dataset ;
+            void:triples 7 ],
+        [ void:property dct:hasVersion ;
+            void:triples 7 ],
+        [ void:property crm:P67_refers_to ;
+            void:triples 7 ],
+        [ void:property rdfs:comment ;
+            void:triples 7 ],
+        [ void:property rdf:type ;
+            void:triples 1088 ],
+        [ void:property prov:wasDerivedFrom ;
+            void:triples 7 ],
+        [ void:property geo:asWKT ;
+            void:triples 7 ],
+        [ void:property schema:longitude ;
+            void:triples 7 ],
+        [ void:property dct:publisher ;
+            void:triples 8 ],
+        [ void:property geo:hasGeometry ;
+            void:triples 7 ],
+        [ void:property dcat:startDate ;
+            void:triples 7 ],
+        [ void:property dct:spatial ;
+            void:triples 7 ],
+        [ void:property crm:P70_documents ;
+            void:triples 7 ],
+        [ void:property rdfs:subPropertyOf ;
+            void:triples 4 ],
+        [ void:property owl:sameAs ;
+            void:triples 4 ],
+        [ void:property <https://w3id.org/fdo-squirrel/sha256> ;
+            void:triples 492 ],
+        [ void:property dcat:bbox ;
+            void:triples 2 ],
+        [ void:property crm:P2_has_type ;
+            void:triples 524 ],
+        [ void:property crm:P102_has_title ;
+            void:triples 15 ],
+        [ void:property dct:description ;
+            void:triples 24 ],
+        [ void:property rdfs:subClassOf ;
+            void:triples 10 ],
+        [ void:property <http://www.wikidata.org/prop/direct/P275> ;
+            void:triples 10 ],
+        [ void:property dct:conformsTo ;
+            void:triples 1 ],
+        [ void:property rdfs:seeAlso ;
+            void:triples 2 ],
+        [ void:property <https://w3id.org/fdo-squirrel/registry/squirrelbaseItem> ;
+            void:triples 2 ],
+        [ void:property dct:issued ;
+            void:triples 15 ],
+        [ void:property <https://w3id.org/fdo-squirrel/role> ;
+            void:triples 492 ],
+        [ void:property dct:identifier ;
+            void:triples 1004 ],
+        [ void:property <https://citation-file-format.github.io/terms/license-url> ;
+            void:triples 10 ],
+        [ void:property <https://w3id.org/fdo-squirrel/path> ;
+            void:triples 510 ],
+        [ void:property dct:creator ;
+            void:triples 9 ],
+        [ void:property dcat:accessURL ;
+            void:triples 510 ] ;
+    void:triples 6673 ;
+    dcat:distribution [ dct:title "FDOx-Registry-Bundle (DCAT + CIDOC CRM, N4O-Anwendungsprofil)"@de,
+                "FDOx Registry bundle (DCAT + CIDOC CRM, N4O application profile)"@en ;
+            dct:type n4op:roleBundle ;
+            dcat:accessURL <https://github.com/FDOx-squirrel/fdo-squirrel-registry/> ;
+            dcat:downloadURL <https://raw.githubusercontent.com/FDOx-squirrel/fdo-squirrel-registry/main/dist/fdo-registry-n4o.ttl> ;
+            dcat:mediaType <https://www.iana.org/assignments/media-types/text/turtle> ] ;
+    dcat:keyword "CIDOC CRM",
+        "DCAT",
+        "FAIR Digital Object",
+        "Linked Open Data",
+        "SHACL",
+        "knowledge graph" ;
+    dcat:landingPage <https://fdox-squirrel.github.io/fdo-squirrel-registry/> ;
+    dcat:version "0.1.0" ;
+    foaf:homepage <https://github.com/FDOx-squirrel/fdo-squirrel-registry> ;
+    schema:sameAs <http://www.wikidata.org/entity/Q141277996> ;
+    n4op:exampleQuery <file:///home/runner/work/fdox-squirrel-n4o-collection/fdox-squirrel-n4o-collection/classes-with-counts>,
+        <file:///home/runner/work/fdox-squirrel-n4o-collection/fdox-squirrel-n4o-collection/fdos-with-type-and-licence> .
+
+<https://raw.githubusercontent.com/FDOx-squirrel/fdo-squirrel-registry/main/dist/fdo-registry-n4o.ttl> spdx:checksum [ spdx:algorithm spdx:checksumAlgorithm_sha256 ;
+            spdx:checksumValue "8641fd2b4d8647197b3a3172f483d65f74a4563a457d1ac121f9088f523eda66" ] .
+
+schema:Organization rdfs:subClassOf crm:E74_Group .
+
+schema:Person rdfs:subClassOf crm:E21_Person .
+
+<https://w3id.org/fdo-squirrel/3DDataFDO> rdfs:subClassOf <http://www.ics.forth.gr/isl/CRMdig/D1_Digital_Object> .
+
+<https://w3id.org/fdo-squirrel/SoftwareFDO> rdfs:subClassOf <http://www.ics.forth.gr/isl/CRMdig/D14_Software> .
+
+crm:E53_Place rdfs:subClassOf crm:E53_Place .
+
+dcat:Dataset rdfs:subClassOf crm:E73_Information_Object .
+
+crm:E21_Person rdfs:subClassOf crm:E21_Person .
+
+crm:E52_Time-Span rdfs:subClassOf crm:E52_Time-Span .
+
+crm:E73_Information_Object rdfs:subClassOf crm:E73_Information_Object .
+
+crm:E74_Group rdfs:subClassOf crm:E74_Group .
+
+<http://www.ics.forth.gr/isl/CRMdig/D1_Digital_Object> rdfs:subClassOf <http://www.ics.forth.gr/isl/CRMdig/D1_Digital_Object> .
+
+<http://www.ics.forth.gr/isl/CRMdig/D9_Data_Object> rdfs:subClassOf <http://www.ics.forth.gr/isl/CRMdig/D9_Data_Object> .
+
+<http://www.ics.forth.gr/isl/CRMgeo/SP5_Geometric_Place_Expression> rdfs:subClassOf <http://www.ics.forth.gr/isl/CRMgeo/SP5_Geometric_Place_Expression> .
+
+crm:E31_Document rdfs:subClassOf crm:E31_Document .
+

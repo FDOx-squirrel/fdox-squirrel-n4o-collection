@@ -1,0 +1,9 @@
+PREFIX crm: <http://www.cidoc-crm.org/cidoc-crm/>
+PREFIX crmdig: <http://www.ics.forth.gr/isl/CRMdig/>
+PREFIX dcat: <http://www.w3.org/ns/dcat#>
+PREFIX dct: <http://purl.org/dc/terms/>
+PREFIX fdo: <https://w3id.org/fdo-squirrel/>
+
+SELECT ?class (COUNT(?s) AS ?count) WHERE {
+  ?s a ?class
+} GROUP BY ?class ORDER BY DESC(?count)

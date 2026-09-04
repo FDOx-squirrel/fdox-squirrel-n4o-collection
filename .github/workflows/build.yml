@@ -10,6 +10,11 @@ permissions:
   pages: write
   id-token: write
 
+permissions:
+  contents: write
+  pages: write
+  id-token: write
+
 jobs:
   collection:
     uses: n4o-rse/n4o-kg-profile/.github/workflows/collection.yml@v1

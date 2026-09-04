@@ -1,0 +1,47 @@
+@prefix crm: <http://www.cidoc-crm.org/cidoc-crm/> .
+@prefix dcat: <http://www.w3.org/ns/dcat#> .
+@prefix dct: <http://purl.org/dc/terms/> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix schema: <https://schema.org/> .
+@prefix skos: <http://www.w3.org/2004/02/skos/core#> .
+
+dct:PeriodOfTime rdfs:subClassOf crm:E52_Time-Span .
+
+<http://www.opengis.net/ont/sf#Point> rdfs:subClassOf <http://www.ics.forth.gr/isl/CRMgeo/SP5_Geometric_Place_Expression> .
+
+skos:Concept rdfs:subClassOf crm:E28_Conceptual_Object .
+
+dcat:Catalog rdfs:subClassOf crm:E31_Document .
+
+dcat:CatalogRecord rdfs:subClassOf crm:E31_Document .
+
+dcat:Dataset rdfs:subClassOf crm:E73_Information_Object .
+
+dcat:Distribution rdfs:subClassOf <http://www.ics.forth.gr/isl/CRMdig/D9_Data_Object> .
+
+schema:Organization rdfs:subClassOf crm:E74_Group .
+
+schema:Person rdfs:subClassOf crm:E21_Person .
+
+<https://w3id.org/fdo-squirrel/3DDataFDO> rdfs:subClassOf <http://www.ics.forth.gr/isl/CRMdig/D1_Digital_Object> .
+
+<https://w3id.org/fdo-squirrel/SoftwareFDO> rdfs:subClassOf <http://www.ics.forth.gr/isl/CRMdig/D14_Software> .
+
+crm:E53_Place rdfs:subClassOf crm:E53_Place .
+
+crm:E21_Person rdfs:subClassOf crm:E21_Person .
+
+crm:E52_Time-Span rdfs:subClassOf crm:E52_Time-Span .
+
+crm:E73_Information_Object rdfs:subClassOf crm:E73_Information_Object .
+
+crm:E74_Group rdfs:subClassOf crm:E74_Group .
+
+<http://www.ics.forth.gr/isl/CRMdig/D1_Digital_Object> rdfs:subClassOf <http://www.ics.forth.gr/isl/CRMdig/D1_Digital_Object> .
+
+<http://www.ics.forth.gr/isl/CRMdig/D9_Data_Object> rdfs:subClassOf <http://www.ics.forth.gr/isl/CRMdig/D9_Data_Object> .
+
+<http://www.ics.forth.gr/isl/CRMgeo/SP5_Geometric_Place_Expression> rdfs:subClassOf <http://www.ics.forth.gr/isl/CRMgeo/SP5_Geometric_Place_Expression> .
+
+crm:E31_Document rdfs:subClassOf crm:E31_Document .
+

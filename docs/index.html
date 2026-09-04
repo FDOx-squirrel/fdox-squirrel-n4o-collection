@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en-GB">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>FDOx Registry</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<div class="container">
+  <nav class="nav">
+    <a href="index.html" class="active">Collection</a>
+    <a href="sparql.html">Query</a>
+  </nav>
+
+  <header class="page-head">
+    <h1>FDOx Registry</h1>
+<p class="intro">A registry for FAIR Digital Objects packaged with the FDOx Squirrel reference implementation: harvests FDO metadata published on Zenodo, bundles it into a DCAT catalogue anchored in CIDOC CRM, validates it with SHACL, and publishes a filter and SPARQL interface as a static site. This collection re-publishes the same CIDOC-CRM-anchored bundle (dist/fdo-registry-n4o.ttl) for the NFDI4Objects Knowledge Graph.</p>  </header>
+
+  <dl class="meta-list">
+    <dt>Collection URI</dt>
+    <dd><a href="https://github.com/FDOx-squirrel/fdo-squirrel-registry">https://github.com/FDOx-squirrel/fdo-squirrel-registry</a></dd>
+    <dt>Publication</dt>
+    <dd><a href="https://github.com/FDOx-squirrel/fdo-squirrel-registry">https://github.com/FDOx-squirrel/fdo-squirrel-registry</a></dd>
+    <dt>Wikidata</dt>
+    <dd><a href="http://www.wikidata.org/entity/Q141277996">http://www.wikidata.org/entity/Q141277996</a></dd>
+    <dt>Licence</dt>
+    <dd><a href="http://creativecommons.org/licenses/by/4.0/">http://creativecommons.org/licenses/by/4.0/</a></dd>
+    <dt>Creators</dt>
+    <dd>Thiery, Florian</dd>
+    <dt>Version</dt>
+    <dd>0.1.0, published 2026-09-04</dd>
+    <dt>Graph</dt>
+    <dd>6,673 triples &middot; 24 classes
+        (20 aligned to CIDOC CRM) &middot; 78 properties</dd>
+  </dl>
+
+  <section class="query">
+    <h2>Files</h2>
+    <ul>
+      <li><a href="https://raw.githubusercontent.com/FDOx-squirrel/fdo-squirrel-registry/main/dist/fdo-registry-n4o.ttl">FDOx Registry bundle (DCAT + CIDOC CRM, N4O application profile)</a></li>
+      <li><a href="metadata.ttl">Metadata (Turtle)</a> &middot;
+          <a href="metadata.jsonld">JSON-LD</a></li>
+      <li><a href="n4o-collection.ttl">N4O KG registration record</a></li>
+      <li><a href="crm-alignment.ttl">CIDOC CRM alignment</a></li>
+    </ul>
+    <p class="note">
+      All of the above is generated from a single <code>metadata.yaml</code> by
+      <a href="https://github.com/n4o-rse/n4o-kg-profile">n4o-kg-profile</a>.
+      Class and property counts are measured from the bundle, not typed in.
+    </p>
+  </section>
+
+  <footer class="page-foot">
+    <p>
+      <a href="sparql.html">Query this collection</a> in your browser.
+      Source repository: <a href="https://fdox-squirrel.github.io/fdo-squirrel-registry/">https://fdox-squirrel.github.io/fdo-squirrel-registry/</a>.
+    </p>
+  </footer>
+</div>
+</body>
+</html>
