@@ -1,0 +1,21 @@
+name: Build
+
+# STATUS 2026-09-04: `push` is deliberately left out of `on:` until the
+# n4o-rse/n4o-kg-profile patch (n4o-kg-profile-patch.zip) is committed,
+# tagged v1 and pushed - see PATCH-README.md there for exactly what it
+# fixes (a self-checkout target that 404s, plus a missing requirements.txt).
+# Pinning this workflow to a commit SHA instead of `@v1` would not help:
+# without the patch, the checkout step inside the action fails regardless
+# of which ref calls it. Once the tag exists (`git ls-remote --tags
+# https://github.com/n4o-rse/n4o-kg-profile.git` shows `v1`), add
+# `push: {branches: [main]}` back below - the `uses:` line already matches
+# what n4o-kg-profile documents and needs no further change.
+
+on:
+  workflow_dispatch:
+
+jobs:
+  collection:
+    uses: n4o-rse/n4o-kg-profile/.github/workflows/collection.yml@v1
+    with:
+      strict: true

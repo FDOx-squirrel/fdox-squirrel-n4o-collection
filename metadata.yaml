@@ -1,0 +1,237 @@
+%YAML 1.2
+---
+# =============================================================================
+# FDOx Registry as a collection of the NFDI4Objects Knowledge Graph.
+#
+# This is the only file maintained by hand in this repository (n4o-kg-profile
+# convention). The four facts at the top plus the NCMDP core are validated by
+# a SHACL gate from n4o-rse/n4o-kg-profile; the workflow that runs it is
+# .github/workflows/build.yml.
+#
+# STATUS 2026-09-04: n4o-rse/n4o-kg-profile is patched directly (Flo owns
+# that org too) rather than reported as an issue - see
+# n4o-kg-profile-patch.zip. Once that patch is committed, tagged v1 and
+# pushed, add `push: {branches: [main]}` back to
+# .github/workflows/build.yml in this repository; until then it only runs
+# on workflow_dispatch.
+# =============================================================================
+
+"@context": https://w3id.org/nfdi4objects/profile/v0.1/context.jsonld
+
+# --- 1. What the N4O KG needs to register the collection ---------------------
+
+# TODO: VZG assigns the real https://graph.nfdi4objects.net/collection/<n>
+# URI on manual onboarding (per Flo, 2026-09-04 - the entry in
+# n4o-collections.json itself is also VZG's, not ours). Until then this uses
+# the same pre-publication convention as MD.cff in fdo-squirrel-registry: a
+# stable IRI that already resolves, so the SHACL gate has a real subject.
+id: https://github.com/FDOx-squirrel/fdo-squirrel-registry
+type: [Database, Dataset]
+
+title:
+  en: FDOx Registry
+  de: FDOx Registry
+
+# TODO: no Zenodo DOI yet - the registry has not been published as its own
+# FDO (fdo-squirrel-registry PRIMER.md, S8/S9). Points at the source
+# repository until then; update once dist/release/ has been published by hand
+# and the DOI is known (same convention as MD.cff's `id` field there).
+homepage: https://github.com/FDOx-squirrel/fdo-squirrel-registry
+sameAs: http://www.wikidata.org/entity/Q141277996
+license: http://creativecommons.org/licenses/by/4.0/
+
+# notation / isPartOf: VZG-assigned alongside `id`, left out until then.
+
+# --- 2. NCMDP core -----------------------------------------------------------
+
+description:
+  en: >-
+    A registry for FAIR Digital Objects packaged with the FDOx Squirrel
+    reference implementation: harvests FDO metadata published on Zenodo,
+    bundles it into a DCAT catalogue anchored in CIDOC CRM, validates it with
+    SHACL, and publishes a filter and SPARQL interface as a static site. This
+    collection re-publishes the same CIDOC-CRM-anchored bundle
+    (dist/fdo-registry-n4o.ttl) for the NFDI4Objects Knowledge Graph.
+  de: >-
+    Eine Registry fuer FAIR Digital Objects, gebaut mit der FDOx-Squirrel-
+    Referenzimplementierung: erntet FDO-Metadaten von Zenodo, buendelt sie zu
+    einem an CIDOC CRM verankerten DCAT-Katalog, validiert ihn mit SHACL und
+    veroeffentlicht eine Filter- und SPARQL-Oberflaeche als statische Seite.
+    Diese Collection veroeffentlicht denselben CIDOC-CRM-verankerten Bundle
+    (dist/fdo-registry-n4o.ttl) fuer den NFDI4Objects Knowledge Graph erneut.
+
+creators:
+  - type: [Person]
+    name: Thiery, Florian
+    givenName: Florian
+    familyName: Thiery
+    orcid: https://orcid.org/0000-0002-3246-3531
+    affiliation:
+      type: [Organization]
+      name: Leibniz-Zentrum fuer Archaeologie (LEIZA)
+
+publisher:
+  type: [Organization]
+  name: Leibniz-Zentrum fuer Archaeologie (LEIZA)
+
+issued: '2026-09-04'
+modified: '2026-09-04'
+version: '0.1.0'
+
+resourceType: http://purl.org/dc/dcmitype/Dataset
+accessRights: http://publications.europa.eu/resource/authority/access-right/PUBLIC
+landingPage: https://fdox-squirrel.github.io/fdo-squirrel-registry/
+
+keywords:
+  - FAIR Digital Object
+  - Linked Open Data
+  - DCAT
+  - CIDOC CRM
+  - SHACL
+  - knowledge graph
+language: [http://id.loc.gov/vocabulary/iso639-1/en]
+
+conformsTo:
+  - https://w3id.org/nfdi4objects/profile/v0.1
+
+# --- 3. What gets loaded into the graph --------------------------------------
+# The bundle is not committed here - it is fetched from the source repository
+# on every build, so this collection never drifts from what
+# fdo-squirrel-registry actually publishes (and automatically gains the
+# registry's own self-entry, S9, the moment that lands in sources.json - no
+# change needed here for that).
+
+distributions:
+  - role: bundle
+    title:
+      en: FDOx Registry bundle (DCAT + CIDOC CRM, N4O application profile)
+      de: FDOx-Registry-Bundle (DCAT + CIDOC CRM, N4O-Anwendungsprofil)
+    file: rdf/fdo-registry-n4o-bundle.ttl
+    accessURL: https://github.com/FDOx-squirrel/fdo-squirrel-registry/
+    source: https://raw.githubusercontent.com/FDOx-squirrel/fdo-squirrel-registry/main/dist/fdo-registry-n4o.ttl
+    downloadURL: https://raw.githubusercontent.com/FDOx-squirrel/fdo-squirrel-registry/main/dist/fdo-registry-n4o.ttl
+    mediaType: https://www.iana.org/assignments/media-types/text/turtle
+
+# --- 4. Model: alignment to CIDOC CRM ----------------------------------------
+# fdo-squirrel-registry materialises most CRM anchors directly on the instance
+# (PRIMER A3: foreign namespaces are never axiomatised, only anchored per
+# node) - so dcat:Distribution nodes, for example, already carry
+# crmdig:D9_Data_Object as a second rdf:type in the bundle itself, and this
+# crosswalk documents that pairing rather than inventing a new one. The one
+# real exception is skos:Concept: the role vocabulary's six concepts are
+# linked to crm:E28_Conceptual_Object only via a global ext-axiom
+# (crm_bridge.ttl, folded into the n4o bundle), not per instance - counted
+# from dist/fdo-registry-n4o.ttl on 2026-09-04 (rdflib, SELECT DISTINCT
+# ?class (COUNT(?s) AS ?n) WHERE { ?s a ?class }).
+#
+# Deliberately not listed (PRIMER A4, "Ankerprüfung": terminological nodes are
+# excluded from the anchor requirement, and skos:ConceptScheme is the
+# profile's own MUST-NOT-E32 replacement and gets no CRM class by design):
+# owl:Ontology, owl:ObjectProperty, owl:DatatypeProperty, skos:ConceptScheme.
+
+model:
+  bundle: rdf/fdo-registry-n4o-bundle.ttl
+
+  classes:
+    - class: https://w3id.org/fdo-squirrel/3DDataFDO
+      crm: http://www.ics.forth.gr/isl/CRMdig/D1_Digital_Object
+    - class: https://w3id.org/fdo-squirrel/SoftwareFDO
+      crm: http://www.ics.forth.gr/isl/CRMdig/D14_Software
+    - class: http://www.w3.org/ns/dcat#Distribution
+      crm: http://www.ics.forth.gr/isl/CRMdig/D9_Data_Object
+    - class: http://www.w3.org/ns/dcat#Catalog
+      crm: http://www.cidoc-crm.org/cidoc-crm/E31_Document
+    - class: http://www.w3.org/ns/dcat#CatalogRecord
+      crm: http://www.cidoc-crm.org/cidoc-crm/E31_Document
+    - class: http://www.w3.org/ns/dcat#Dataset
+      crm: http://www.cidoc-crm.org/cidoc-crm/E73_Information_Object
+    - class: http://purl.org/dc/terms/PeriodOfTime
+      crm: http://www.cidoc-crm.org/cidoc-crm/E52_Time-Span
+    - class: https://schema.org/Person
+      crm: http://www.cidoc-crm.org/cidoc-crm/E21_Person
+    - class: https://schema.org/Organization
+      crm: http://www.cidoc-crm.org/cidoc-crm/E74_Group
+    - class: http://www.opengis.net/ont/sf#Point
+      crm: http://www.ics.forth.gr/isl/CRMgeo/SP5_Geometric_Place_Expression
+    - class: http://www.w3.org/2004/02/skos/core#Concept
+      crm: http://www.cidoc-crm.org/cidoc-crm/E28_Conceptual_Object
+
+    # The ten pairs above map a *native* class to the CRM class its
+    # instances also carry. But make_metadata.py's alignment check (see
+    # build/make_metadata.py, add_model_statistics) looks up every class
+    # occurring in the bundle by itself, without inference - and because
+    # fdo-squirrel-registry materialises most CRM anchors as a second
+    # rdf:type directly on the same node (PRIMER A3, "instance"
+    # mechanism), the CRM classes themselves also occur as their own,
+    # separate class_counts entries. Without an entry keyed by the CRM
+    # class itself, the build reports them as "no CRM alignment" even
+    # though they already *are* the alignment target. Confirmed against
+    # the real bundle 2026-09-04 (N4O_STRICT=1 python build/make_metadata.py):
+    # these nine were the ones listed missing. Self-mapped rather than left
+    # out, so dist/crm-alignment.ttl and the VoID statistics are complete.
+    - class: http://www.cidoc-crm.org/cidoc-crm/E21_Person
+      crm: http://www.cidoc-crm.org/cidoc-crm/E21_Person
+    - class: http://www.cidoc-crm.org/cidoc-crm/E31_Document
+      crm: http://www.cidoc-crm.org/cidoc-crm/E31_Document
+    - class: http://www.cidoc-crm.org/cidoc-crm/E52_Time-Span
+      crm: http://www.cidoc-crm.org/cidoc-crm/E52_Time-Span
+    - class: http://www.cidoc-crm.org/cidoc-crm/E53_Place
+      crm: http://www.cidoc-crm.org/cidoc-crm/E53_Place
+    - class: http://www.cidoc-crm.org/cidoc-crm/E73_Information_Object
+      crm: http://www.cidoc-crm.org/cidoc-crm/E73_Information_Object
+    - class: http://www.cidoc-crm.org/cidoc-crm/E74_Group
+      crm: http://www.cidoc-crm.org/cidoc-crm/E74_Group
+    - class: http://www.ics.forth.gr/isl/CRMdig/D1_Digital_Object
+      crm: http://www.ics.forth.gr/isl/CRMdig/D1_Digital_Object
+    - class: http://www.ics.forth.gr/isl/CRMdig/D9_Data_Object
+      crm: http://www.ics.forth.gr/isl/CRMdig/D9_Data_Object
+    - class: http://www.ics.forth.gr/isl/CRMgeo/SP5_Geometric_Place_Expression
+      crm: http://www.ics.forth.gr/isl/CRMgeo/SP5_Geometric_Place_Expression
+
+# --- 5. Example queries ------------------------------------------------------
+# Two of the eight, adapted from fdo-squirrel-registry/queries.yaml, which
+# proves them non-empty against the same bundle on every S7 build. Prefixes
+# match that file so a reader can carry a query between the two pages
+# unchanged.
+
+prefixes: |
+  PREFIX crm: <http://www.cidoc-crm.org/cidoc-crm/>
+  PREFIX crmdig: <http://www.ics.forth.gr/isl/CRMdig/>
+  PREFIX dcat: <http://www.w3.org/ns/dcat#>
+  PREFIX dct: <http://purl.org/dc/terms/>
+  PREFIX fdo: <https://w3id.org/fdo-squirrel/>
+
+queries:
+  - id: fdos-with-type-and-licence
+    title:
+      en: Every FDO with its type, licence and file count
+      de: Jedes FDO mit Typ, Lizenz und Dateizahl
+    intro:
+      en: >-
+        The list the registry exists for, counted from the catalogue node
+        outwards - the same query fdo-squirrel-registry runs as its own
+        crosscheck against the facet page (queries.yaml, catalogue-overview).
+      de: >-
+        Die Liste, fuer die die Registry existiert, vom Katalogknoten aus
+        gezaehlt - dieselbe Abfrage, mit der fdo-squirrel-registry sich selbst
+        gegen die Facettenseite gegenprueft (queries.yaml, catalogue-overview).
+    sparql: |
+      SELECT ?fdo ?title ?type ?licence (COUNT(?distribution) AS ?files) WHERE {
+        ?catalogue a dcat:Catalog ; dcat:dataset ?fdo .
+        ?fdo dct:title ?title ; a ?type .
+        FILTER(STRSTARTS(STR(?type), STR(fdo:)))
+        OPTIONAL { ?fdo dct:license ?licence }
+        OPTIONAL { ?fdo dcat:distribution ?distribution }
+      } GROUP BY ?fdo ?title ?type ?licence ORDER BY ?title
+
+  - id: classes-with-counts
+    title:
+      en: Classes used, with counts
+      de: Verwendete Klassen mit Anzahl
+    intro:
+      en: What occurs in this collection - the counterpart to the VoID statistics.
+      de: Was in dieser Sammlung vorkommt - die Gegenprobe zur VoID-Statistik.
+    sparql: |
+      SELECT ?class (COUNT(?s) AS ?count) WHERE {
+        ?s a ?class
+      } GROUP BY ?class ORDER BY DESC(?count)

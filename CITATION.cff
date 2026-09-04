@@ -1,0 +1,34 @@
+cff-version: 1.2.0
+message: "If you use this collection, please cite it as below."
+title: "FDOx Registry — NFDI4Objects collection"
+abstract: >-
+  The NFDI4Objects Knowledge Graph collection repository for the FDOx
+  Registry: republishes fdo-squirrel-registry's CIDOC-CRM-anchored DCAT
+  bundle, validated against the n4o-kg-profile application profile.
+type: software
+version: "0.1.0"
+date-released: "2026-09-04"
+license: MIT
+repository-code: "https://github.com/FDOx-squirrel/fdox-squirrel-n4o-collection"
+authors:
+  - given-names: Florian
+    family-names: Thiery
+    orcid: "https://orcid.org/0000-0002-3246-3531"
+    affiliation: "Leibniz-Zentrum für Archäologie (LEIZA)"
+keywords:
+  - FAIR Digital Object
+  - Linked Open Data
+  - DCAT
+  - CIDOC CRM
+  - SHACL
+  - knowledge graph
+  - NFDI4Objects
+references:
+  - type: software
+    title: "FDOx Registry"
+    repository-code: "https://github.com/FDOx-squirrel/fdo-squirrel-registry"
+    year: 2026
+  - type: software
+    title: "n4o-kg-profile"
+    repository-code: "https://github.com/n4o-rse/n4o-kg-profile"
+    year: 2026
