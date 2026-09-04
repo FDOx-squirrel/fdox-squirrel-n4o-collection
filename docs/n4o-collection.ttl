@@ -1,0 +1,17 @@
+@prefix dcat: <http://www.w3.org/ns/dcat#> .
+@prefix dct: <http://purl.org/dc/terms/> .
+@prefix fabio: <http://purl.org/spar/fabio/> .
+@prefix foaf: <http://xmlns.com/foaf/0.1/> .
+@prefix schema: <https://schema.org/> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+
+<https://github.com/FDOx-squirrel/fdo-squirrel-registry> a fabio:Database,
+        dcat:Dataset ;
+    dct:issued "2026-09-04"^^xsd:date ;
+    dct:license <http://creativecommons.org/licenses/by/4.0/> ;
+    dcat:downloadURL <https://raw.githubusercontent.com/FDOx-squirrel/fdo-squirrel-registry/main/dist/fdo-registry-n4o.ttl> ;
+    foaf:homepage <https://github.com/FDOx-squirrel/fdo-squirrel-registry> ;
+    schema:name "FDOx Registry"@de,
+        "FDOx Registry"@en ;
+    schema:sameAs <http://www.wikidata.org/entity/Q141277996> .
+
